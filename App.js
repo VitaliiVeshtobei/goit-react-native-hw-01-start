@@ -1,11 +1,58 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from "react-native";
+
+import { Registration } from "./Screens/RegistrationScreen";
+import { Login } from "./Screens/LoginScreen";
 
 export default function App() {
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [toggleRegLog, setToggleRegLog] = useState(true);
+
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  };
+
+  const toggle = (bool) => {
+    setToggleRegLog(bool);
+  };
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <TouchableWithoutFeedback onPress={keyboardHide}>
+        <ImageBackground
+          style={styles.image}
+          source={require("./assets/images/photoBg.jpg")}
+        >
+          {/* <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          > */}
+          {toggleRegLog ? (
+            <Registration
+              toggle={toggle}
+              keyboardHide={keyboardHide}
+              setIsShowKeyboard={setIsShowKeyboard}
+              isShowKeyboard={isShowKeyboard}
+            />
+          ) : (
+            <Login
+              toggle={toggle}
+              keyboardHide={keyboardHide}
+              setIsShowKeyboard={setIsShowKeyboard}
+              isShowKeyboard={isShowKeyboard}
+            />
+          )}
+
+          {/* </KeyboardAvoidingView> */}
+        </ImageBackground>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -14,7 +61,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-end",
   },
 });
