@@ -99,6 +99,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 8,
     padding: 16,
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
   },
   form: {
     paddingTop: 32,
@@ -114,6 +116,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     marginBottom: 33,
+    fontFamily: "Roboto-Medium",
+    fontWeight: 500,
   },
 
   button: {
@@ -127,13 +131,21 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#f0f8ff",
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
   },
 
-  buttonLogin: { marginTop: 16 },
+  buttonLogin: {
+    marginTop: 16,
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
+  },
   showPassword: {
     position: "absolute",
     right: 16,
     top: 16,
     color: "#1B4371",
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
   },
 });

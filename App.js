@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   StyleSheet,
@@ -6,14 +6,42 @@ import {
   View,
   Keyboard,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
+
+import * as Font from "expo-font";
+// import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
 
 import { Registration } from "./Screens/RegistrationScreen";
 import { Login } from "./Screens/LoginScreen";
 
+const loadApplication = async () => {
+  await Font.loadAsync({
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  });
+};
+
 export default function App() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [toggleRegLog, setToggleRegLog] = useState(true);
+  const [iasReady, setIasReady] = useState(false);
+  const [dimensions, setdimensions] = useState(
+    Dimensions.get("window").width - 20 * 2
+  );
+  console.log(dimensions);
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width - 20 * 2;
+
+      setdimensions(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -23,6 +51,16 @@ export default function App() {
   const toggle = (bool) => {
     setToggleRegLog(bool);
   };
+
+  if (!iasReady) {
+    return (
+      <AppLoading
+        startAsync={loadApplication}
+        onFinish={() => setIasReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -40,6 +78,7 @@ export default function App() {
               keyboardHide={keyboardHide}
               setIsShowKeyboard={setIsShowKeyboard}
               isShowKeyboard={isShowKeyboard}
+              dimensions={dimensions}
             />
           ) : (
             <Login
@@ -66,5 +105,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
+    // alignItems: "center",
   },
 });

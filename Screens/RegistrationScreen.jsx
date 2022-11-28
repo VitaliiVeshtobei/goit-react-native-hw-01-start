@@ -22,6 +22,7 @@ export const Registration = ({
   setIsShowKeyboard,
   isShowKeyboard,
   toggle,
+  dimensions,
 }) => {
   const [state, setstate] = useState(initialState);
 
@@ -35,11 +36,17 @@ export const Registration = ({
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
     >
-      <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 32 : 78 }}>
+      <View
+        style={{
+          ...styles.form,
+          paddingBottom: isShowKeyboard ? 32 : 78,
+          // width: dimensions,
+        }}
+      >
         <View style={styles.photo}>
           <Image
             style={styles.add}
-            source={require("../assets/images/add.svg")}
+            source={require("../assets/images/add.png")}
           />
         </View>
         <Text style={styles.title}>Регистрация</Text>
@@ -123,7 +130,8 @@ const styles = StyleSheet.create({
   add: {
     width: 30,
     height: 30,
-    // position: "absolute",
+    left: 105,
+    top: 75,
   },
   input: {
     position: "relative",
@@ -133,6 +141,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 8,
     padding: 16,
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
   },
   form: {
     position: "relative",
@@ -140,13 +150,13 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: "#FFFFFF",
-
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
   },
   title: {
     color: "#212121",
-    // fontFamily: "Roboto-Regular",
+    fontFamily: "Roboto-Medium",
+    fontWeight: 500,
     fontSize: 30,
     textAlign: "center",
     marginBottom: 33,
@@ -163,13 +173,21 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#f0f8ff",
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
   },
 
-  buttonLogin: { marginTop: 16 },
+  buttonLogin: {
+    marginTop: 16,
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
+  },
   showPassword: {
     position: "absolute",
     right: 16,
     top: 16,
     color: "#1B4371",
+    fontFamily: "Roboto-Medium",
+    fontWeight: 400,
   },
 });
