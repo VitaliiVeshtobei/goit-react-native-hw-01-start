@@ -5,7 +5,6 @@ import {
   ImageBackground,
   View,
   Keyboard,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
 
@@ -24,6 +23,7 @@ export default function App() {
   const toggle = (bool) => {
     setToggleRegLog(bool);
   };
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={keyboardHide}>

@@ -65,22 +65,26 @@ export const Login = ({
             <Text style={styles.showPassword}>Показать</Text>
           </View>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.button}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>Войти</Text>
-        </TouchableOpacity>
-        <View style={styles.buttonLogin}>
-          <Button
-            onPress={() => {
-              toggle(true);
-            }}
-            title="Нет аккаунта? Зарегистрироваться"
-            color="#1B4371"
-          />
-        </View>
+        {!isShowKeyboard && (
+          <View>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.button}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.buttonText}>Войти</Text>
+            </TouchableOpacity>
+            <View style={styles.buttonLogin}>
+              <Button
+                onPress={() => {
+                  toggle(true);
+                }}
+                title="Нет аккаунта? Зарегистрироваться"
+                color="#1B4371"
+              />
+            </View>
+          </View>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
