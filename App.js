@@ -1,20 +1,13 @@
 import { useState, useEffect } from "react";
-
-import {
-  StyleSheet,
-  ImageBackground,
-  View,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Dimensions,
-} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import * as Font from "expo-font";
 // import { AppLoading } from "expo";
 import AppLoading from "expo-app-loading";
 
-import { Registration } from "./Screens/RegistrationScreen";
-import { Login } from "./Screens/LoginScreen";
+import { RegisterScreen } from "./screens/auth/RegisterScreen";
+import { LoginScreen } from "./screens/auth/LoginScreen";
 
 const loadApplication = async () => {
   await Font.loadAsync({
@@ -23,34 +16,10 @@ const loadApplication = async () => {
   });
 };
 
+const AuthStack = createNativeStackNavigator();
+
 export default function App() {
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [toggleRegLog, setToggleRegLog] = useState(true);
   const [iasReady, setIasReady] = useState(false);
-  const [dimensions, setdimensions] = useState(
-    Dimensions.get("window").width - 20 * 2
-  );
-  console.log(dimensions);
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width - 20 * 2;
-
-      setdimensions(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
-
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
-
-  const toggle = (bool) => {
-    setToggleRegLog(bool);
-  };
 
   if (!iasReady) {
     return (
@@ -63,48 +32,19 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={keyboardHide}>
-        <ImageBackground
-          style={styles.image}
-          source={require("./assets/images/photoBg.jpg")}
-        >
-          {/* <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          > */}
-          {toggleRegLog ? (
-            <Registration
-              toggle={toggle}
-              keyboardHide={keyboardHide}
-              setIsShowKeyboard={setIsShowKeyboard}
-              isShowKeyboard={isShowKeyboard}
-              dimensions={dimensions}
-            />
-          ) : (
-            <Login
-              toggle={toggle}
-              keyboardHide={keyboardHide}
-              setIsShowKeyboard={setIsShowKeyboard}
-              isShowKeyboard={isShowKeyboard}
-            />
-          )}
-
-          {/* </KeyboardAvoidingView> */}
-        </ImageBackground>
-      </TouchableWithoutFeedback>
-    </View>
+    <NavigationContainer>
+      <AuthStack.Navigator>
+        <AuthStack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <AuthStack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+      </AuthStack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-    // alignItems: "center",
-  },
-});
