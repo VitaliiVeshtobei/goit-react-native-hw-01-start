@@ -21,11 +21,16 @@ export const LoginScreen = ({ navigation }) => {
   const [state, setstate] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
+  const onSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    setstate(initialState);
+    navigation.navigate("Home");
+  };
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
-    setstate(initialState);
   };
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -81,7 +86,7 @@ export const LoginScreen = ({ navigation }) => {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.button}
-                    onPress={keyboardHide}
+                    onPress={onSubmit}
                   >
                     <Text style={styles.buttonText}>Войти</Text>
                   </TouchableOpacity>
