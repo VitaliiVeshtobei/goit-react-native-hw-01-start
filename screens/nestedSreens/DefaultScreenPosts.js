@@ -33,7 +33,7 @@ const PostsScreen = ({ route, navigation }) => {
               <TouchableOpacity
                 style={styles.commentContainer}
                 onPress={() => {
-                  navigation.navigate("Comments");
+                  navigation.navigate("Comments", { item });
                 }}
               >
                 <Feather name="message-circle" size={24} color="#BDBDBD" />
@@ -43,7 +43,7 @@ const PostsScreen = ({ route, navigation }) => {
               <TouchableOpacity
                 style={styles.locationContainer}
                 onPress={() => {
-                  navigation.navigate("Map");
+                  navigation.navigate("Map", { item });
                 }}
               >
                 <Feather name="map-pin" size={24} color="#BDBDBD" />

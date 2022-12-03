@@ -17,12 +17,8 @@ export const Home = () => {
     <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
       <MainTab.Screen
         options={{
-          title: "Публикации",
-          headerRight: () => (
-            <TouchableOpacity style={styles.logOutContainer}>
-              <Feather name="log-out" size={24} color="black" />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
+
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name="ios-grid-outline" size={size} color={color} />
           ),

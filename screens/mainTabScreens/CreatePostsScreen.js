@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   Keyboard,
+  Image,
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
@@ -72,13 +73,18 @@ const CreatePostsScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <Camera style={styles.camera} ref={setCamera}>
-          {statusPhoto && (
-            <TouchableOpacity style={styles.btnContainer} onPress={takePhoto}>
-              <Feather name="camera" size={24} color="white" />
-            </TouchableOpacity>
-          )}
-        </Camera>
+        {photo ? (
+          <Image source={{ uri: photo }} style={styles.camera} />
+        ) : (
+          <Camera style={styles.camera} ref={setCamera}>
+            {statusPhoto && (
+              <TouchableOpacity style={styles.btnContainer} onPress={takePhoto}>
+                <Feather name="camera" size={24} color="white" />
+              </TouchableOpacity>
+            )}
+          </Camera>
+        )}
+
         <TouchableOpacity style={styles.confirmFotoContainer}>
           {!photo ? (
             <Text style={styles.confitmFotoText}>Загрузите фото</Text>
