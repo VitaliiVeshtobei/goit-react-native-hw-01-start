@@ -1,13 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const PostsScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>PostsScreen</Text>
-    </View>
-  );
-};
+const MapScreen = () => (
+  <View style={styles.container}>
+    <Text>MapScreen</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -17,4 +15,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostsScreen;
+export default MapScreen;

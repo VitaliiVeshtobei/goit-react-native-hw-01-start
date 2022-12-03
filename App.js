@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import * as Font from "expo-font";
-import AppLoading from "expo-app-loading";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+// SplashScreen.preventAutoHideAsync();
 
 import { RegisterScreen } from "./screens/mainStackScreens/RegisterScreen";
 import { LoginScreen } from "./screens/mainStackScreens/LoginScreen";
@@ -11,28 +13,24 @@ import { Home } from "./screens/mainStackScreens/Home";
 
 const MainStack = createNativeStackNavigator();
 
-const loadApplication = async () => {
-  await Font.loadAsync({
+export default function App() {
+  const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
   });
-};
+  console.log(fontsLoaded);
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-export default function App() {
-  const [iasReady, setIasReady] = useState(false);
-
-  if (!iasReady) {
-    return (
-      <AppLoading
-        startAsync={loadApplication}
-        onFinish={() => setIasReady(true)}
-        onError={console.warn}
-      />
-    );
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer onLayout={onLayoutRootView}>
       <MainStack.Navigator initialRouteName="Registration">
         <MainStack.Screen
           name="Registration"

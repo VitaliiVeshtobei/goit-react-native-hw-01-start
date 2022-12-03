@@ -93,7 +93,7 @@ export const LoginScreen = ({ navigation }) => {
                   <TouchableOpacity
                     style={styles.goRegisterContainer}
                     onPress={() => {
-                      navigation.navigate("Register");
+                      navigation.navigate("Registration");
                     }}
                   >
                     <Text style={styles.goRegisterText}>

@@ -8,9 +8,9 @@ import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 
 const MainTab = createBottomTabNavigator();
 
-import PostsScreen from "../PostsScreen";
-import ProfileScreen from "../ProfileScreen";
-import CreatePostsScreen from "../CreatePostsScreen";
+import PostsScreen from "../mainTabScreens/PostsScreen";
+import ProfileScreen from "../mainTabScreens/ProfileScreen";
+import CreatePostsScreen from "../mainTabScreens/CreatePostsScreen";
 
 export const Home = () => {
   return (
@@ -32,7 +32,7 @@ export const Home = () => {
       />
       <MainTab.Screen
         options={{
-          headerShown: false,
+          title: "Создать публикацию",
           tabBarIcon: ({ focused, color, size }) => (
             <View style={styles.plusContainer}>
               <AntDesign name="plus" size={13} color="white" />
