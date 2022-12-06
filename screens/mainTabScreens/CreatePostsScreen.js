@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   TouchableOpacity,
@@ -14,6 +15,8 @@ import * as Location from "expo-location";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 
+import db from "../../firebase/config";
+
 const CreatePostsScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [namePhoto, setNamePhoto] = useState("");
@@ -24,6 +27,8 @@ const CreatePostsScreen = ({ navigation }) => {
   const [statusPhoto, setStatusPhoto] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -55,19 +60,43 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
-    console.log(photo);
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
     setPhoto(photo.uri);
   };
 
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+
+    const uniquePostId = Date.now().toString();
+
+    await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+
+    const processedPhoto = await db
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+
+    return processedPhoto;
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await db
+      .firestore()
+      .collection("posts")
+      .add({ photo, namePhoto, location: location.coords, userId, login });
+  };
+
   const publishPost = async () => {
-    if (!photo) return;
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
-    navigation.navigate("DefaultScreen", { photo, namePhoto, location });
+    uploadPostToServer();
+
+    navigation.navigate("DefaultScreen");
     setPhoto(null);
     setNamePhoto("");
     setLocation("");
-    console.log(location);
   };
 
   return (
@@ -152,9 +181,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 32,
     marginHorizontal: 16,
-
-    // justifyContent: "center",
-    // alignItems: "center",
   },
   camera: {
     height: 300,

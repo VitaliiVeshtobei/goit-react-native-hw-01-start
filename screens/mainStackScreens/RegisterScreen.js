@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { authSignUpUser } from "../../redux/auth/authOperations";
 
 import {
   StyleSheet,
@@ -23,11 +26,15 @@ export const RegisterScreen = ({ navigation }) => {
   const [state, setstate] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
+  const dispatch = useDispatch();
+
   const onSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    console.log(state);
+    dispatch(authSignUpUser(state));
     setstate(initialState);
-    navigation.navigate("Home");
+    // navigation.navigate("Home");
   };
 
   const keyboardHide = () => {
@@ -135,7 +142,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    // alignItems: "center",
   },
   photo: {
     position: "absolute",

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import db from "../../firebase/config";
 import {
   View,
   Text,
@@ -10,15 +11,21 @@ import {
 
 import { Feather } from "@expo/vector-icons";
 
-const PostsScreen = ({ route, navigation }) => {
+const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
-  console.log("route.params", route.params);
+
+  const getAllPosts = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) => {
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      });
+  };
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    getAllPosts();
+  }, []);
   console.log("posts", posts);
   return (
     <View style={styles.container}>
@@ -66,7 +73,6 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     marginTop: 32,
-    // marginBottom: 32,
   },
   image: {
     width: "100%",

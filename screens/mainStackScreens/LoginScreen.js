@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { authSignInUser } from "../../redux/auth/authOperations";
+
 import {
   StyleSheet,
   Text,
@@ -6,7 +10,6 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Button,
   KeyboardAvoidingView,
   Keyboard,
   ImageBackground,
@@ -21,11 +24,14 @@ export const LoginScreen = ({ navigation }) => {
   const [state, setstate] = useState(initialState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
+  const dispatch = useDispatch();
+
   const onSubmit = () => {
+    dispatch(authSignInUser(state));
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setstate(initialState);
-    navigation.navigate("Home");
+    // navigation.navigate("Home");
   };
 
   const keyboardHide = () => {
@@ -119,7 +125,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    // alignItems: "center",
   },
   input: {
     position: "relative",
