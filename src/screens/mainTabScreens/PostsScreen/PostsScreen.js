@@ -1,17 +1,19 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import DefaultScreenPosts from "../nestedSreens/DefaultScreenPosts";
-import CommentsScreen from "../nestedSreens/CommentsScreen";
-import MapScreen from "../nestedSreens/MapScreen";
+import DefaultScreenPosts from "../../nestedSreens/DefaultScreen/DefaultScreenPosts";
+import CommentsScreen from "../../nestedSreens/CommentsScreen/CommentsScreen";
+import MapScreen from "../../nestedSreens/MapScreen/MapScreen";
 
-import { authSignOutUser } from "../../redux/auth/authOperations";
+import { authSignOutUser } from "../../../../redux/auth/authOperations";
+
+import { styles } from "./PostsScreenStyled";
 
 const NestedScreen = createNativeStackNavigator();
 
-const PostsScreen = ({ navigation }) => {
+const PostsScreen = () => {
   const dispatch = useDispatch();
   const signOut = () => {
     dispatch(authSignOutUser());
@@ -47,11 +49,5 @@ const PostsScreen = ({ navigation }) => {
     </NestedScreen.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  logOutContainer: {
-    marginRight: 10,
-  },
-});
 
 export default PostsScreen;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -8,9 +8,11 @@ import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 
 const MainTab = createBottomTabNavigator();
 
-import PostsScreen from "../mainTabScreens/PostsScreen";
-import ProfileScreen from "../mainTabScreens/ProfileScreen";
-import CreatePostsScreen from "../mainTabScreens/CreatePostsScreen";
+import PostsScreen from "../../mainTabScreens/PostsScreen/PostsScreen";
+import ProfileScreen from "../../mainTabScreens/ProfileScreen/ProfileScreen";
+import CreatePostsScreen from "../../mainTabScreens/CreatePostsScreen/CreatePostsScreen";
+
+import { styles } from "./HomeStyled";
 
 export const Home = () => {
   return (
@@ -51,17 +53,3 @@ export const Home = () => {
     </MainTab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  logOutContainer: {
-    marginRight: 10,
-  },
-  plusContainer: {
-    width: 70,
-    height: 40,
-    backgroundColor: "#FF6C00",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-  },
-});

@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+
+import { styles } from "./MapScreenStyled";
 
 const MapScreen = ({ route }) => {
   const { latitude, longitude } = route.params.item.location;
@@ -27,11 +29,5 @@ const MapScreen = ({ route }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default MapScreen;

@@ -7,9 +7,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import { RegisterScreen } from "../screens/mainStackScreens/RegisterScreen";
-import { LoginScreen } from "../screens/mainStackScreens/LoginScreen";
-import { Home } from "../screens/mainStackScreens/Home";
+import { RegisterScreen } from "../screens/mainStackScreens/RegisterScreen/RegisterScreen";
+import { LoginScreen } from "../screens/mainStackScreens/LoginScreen/LoginScreen";
+import { Home } from "../screens/mainStackScreens/Home/Home";
 
 import { authStateCahngeUser } from "../redux/auth/authOperations";
 

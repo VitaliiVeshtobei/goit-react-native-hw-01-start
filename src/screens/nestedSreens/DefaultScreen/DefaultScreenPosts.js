@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import db from "../../firebase/config";
+import db from "../../../../firebase/config";
 
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
+
+import { styles } from "./DefaultScreenStyled";
 
 const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -66,47 +61,5 @@ const PostsScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-
-    marginHorizontal: 16,
-  },
-  postContainer: {
-    marginTop: 32,
-  },
-  image: {
-    width: "100%",
-    height: 240,
-    borderRadius: 8,
-  },
-  imageName: {
-    color: "#212121",
-    fontFamily: "Roboto-Medium",
-    fontWeight: 500,
-    marginTop: 8,
-  },
-  detailsContainer: { flexDirection: "row", alignItems: "baseline" },
-  commentContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  commentText: {
-    marginLeft: 9,
-    color: "#BDBDBD",
-  },
-
-  locationContainer: {
-    marginLeft: 50,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  locationText: {
-    marginLeft: 8,
-  },
-});
 
 export default PostsScreen;
