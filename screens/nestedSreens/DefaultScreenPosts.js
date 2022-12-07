@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import db from "../../firebase/config";
+
 import {
   View,
   Text,
@@ -13,6 +14,12 @@ import { Feather } from "@expo/vector-icons";
 
 const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
+  const [numberOfComments, setNumberOfComments] = useState(null);
+  console.log(posts);
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   const getAllPosts = async () => {
     await db
@@ -23,10 +30,6 @@ const PostsScreen = ({ navigation }) => {
       });
   };
 
-  useEffect(() => {
-    getAllPosts();
-  }, []);
-  console.log("posts", posts);
   return (
     <View style={styles.container}>
       <FlatList
@@ -44,7 +47,7 @@ const PostsScreen = ({ navigation }) => {
                 }}
               >
                 <Feather name="message-circle" size={24} color="#BDBDBD" />
-                <Text style={styles.commentText}>0</Text>
+                <Text style={styles.commentText}>{0}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -54,7 +57,7 @@ const PostsScreen = ({ navigation }) => {
                 }}
               >
                 <Feather name="map-pin" size={24} color="#BDBDBD" />
-                <Text style={styles.locationText}>Location</Text>
+                <Text style={styles.locationText}>{item.locationCity}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -31,10 +31,9 @@ export const RegisterScreen = ({ navigation }) => {
   const onSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+
     dispatch(authSignUpUser(state));
     setstate(initialState);
-    // navigation.navigate("Home");
   };
 
   const keyboardHide = () => {

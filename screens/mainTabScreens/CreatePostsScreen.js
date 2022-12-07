@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
+import * as LocationGeocodedAddress from "expo-location";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 
@@ -21,6 +22,7 @@ const CreatePostsScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [namePhoto, setNamePhoto] = useState("");
   const [location, setLocation] = useState("");
+  const [locationCity, setLocationCity] = useState("");
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [statusLocation, setStatusLocation] = useState(false);
@@ -58,11 +60,30 @@ const CreatePostsScreen = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
+  const resetPost = () => {
+    setLocation("");
+    setPhoto(null);
+    setNamePhoto("");
+    setLocation("");
+    setLocationCity("");
+  };
+
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
     let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
+    await setLocation(location);
     setPhoto(photo.uri);
+  };
+
+  const locationGeocodedAddress = async () => {
+    if (!location) return;
+    let locationGeocodedAddress =
+      await LocationGeocodedAddress.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+
+    setLocationCity(locationGeocodedAddress[0].city);
   };
 
   const uploadPhotoToServer = async () => {
@@ -84,10 +105,14 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const uploadPostToServer = async () => {
     const photo = await uploadPhotoToServer();
-    const createPost = await db
-      .firestore()
-      .collection("posts")
-      .add({ photo, namePhoto, location: location.coords, userId, login });
+    const createPost = await db.firestore().collection("posts").add({
+      photo,
+      namePhoto,
+      location: location.coords,
+      userId,
+      login,
+      locationCity,
+    });
   };
 
   const publishPost = async () => {
@@ -97,6 +122,7 @@ const CreatePostsScreen = ({ navigation }) => {
     setPhoto(null);
     setNamePhoto("");
     setLocation("");
+    setLocationCity("");
   };
 
   return (
@@ -137,9 +163,11 @@ const CreatePostsScreen = ({ navigation }) => {
               style={styles.input}
               placeholder={"Местность..."}
               placeholderTextColor={"#BDBDBD"}
-              onFocus={() => setIsShowKeyboard(true)}
-              value={location}
-              onChangeText={setLocation}
+              onFocus={() => {
+                locationGeocodedAddress(), setIsShowKeyboard(true);
+              }}
+              value={locationCity}
+              onChangeText={locationCity}
             />
           </View>
         </View>
@@ -169,7 +197,12 @@ const CreatePostsScreen = ({ navigation }) => {
           style={styles.deletehBtnContainer}
           // onPress={}
         >
-          <AntDesign name="delete" size={24} color="black" />
+          <AntDesign
+            name="delete"
+            size={24}
+            color="black"
+            onPress={resetPost}
+          />
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
