@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 
 import { styles } from "./CommentsStyled";
 
-import db from "../../../../firebase/config";
+import db from "../../../firebase/config";
 
 const CommentsScreen = ({ route }) => {
   const photo = route.params.item.photo;
@@ -23,7 +23,7 @@ const CommentsScreen = ({ route }) => {
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
 
-  const { login } = useSelector((state) => state.auth);
+  const { login, avatar } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getAllPosts();
@@ -36,7 +36,7 @@ const CommentsScreen = ({ route }) => {
       .collection("posts")
       .doc(postId)
       .collection("comments")
-      .add({ comment, login, date });
+      .add({ comment, login, date, avatar });
     setComment("");
   };
 
@@ -60,7 +60,11 @@ const CommentsScreen = ({ route }) => {
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => (
           <View style={styles.commentContainer}>
-            <Text style={styles.imageName}>{item.login}</Text>
+            <View style={styles.avatarContainer}>
+              <Image style={styles.avatar} source={{ uri: item.avatar }} />
+              <Text style={styles.login}>{item.login}</Text>
+            </View>
+
             <View style={styles.commentTextContainer}>
               <Text style={styles.comment}>{item.comment}</Text>
               <Text style={styles.commentDate}>{item.date}</Text>

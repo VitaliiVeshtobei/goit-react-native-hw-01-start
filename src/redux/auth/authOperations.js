@@ -2,16 +2,17 @@ import db from "../../firebase/config";
 import { updateUserProfile, authStateChange, authSignOut } from "./authReducer";
 
 export const authSignUpUser =
-  ({ email, password, login }) =>
+  ({ email, password, login, avatar }) =>
   async (dispatch, getState) => {
     console.log("email, password, login", email, password, login);
     try {
       await db.auth().createUserWithEmailAndPassword(email, password);
 
       const user = await db.auth().currentUser;
-
+      console.log(user);
       await user.updateProfile({
         displayName: login,
+        photoURL: avatar,
       });
 
       const { displayName, uid } = await db.auth().currentUser;
@@ -19,6 +20,7 @@ export const authSignUpUser =
       const userUpdateProfile = {
         login: displayName,
         userId: uid,
+        avatar: photoURL,
       };
 
       dispatch(updateUserProfile(userUpdateProfile));
@@ -52,6 +54,7 @@ export const authStateCahngeUser = () => async (dispatch, getState) => {
       const userUpdateProfile = {
         login: user.displayName,
         userId: user.uid,
+        avatar: user.photoURL,
       };
 
       dispatch(authStateChange({ stateChange: true }));

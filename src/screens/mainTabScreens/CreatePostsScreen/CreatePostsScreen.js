@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  StyleSheet,
   Text,
   TextInput,
   Keyboard,
@@ -14,11 +13,13 @@ import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import * as LocationGeocodedAddress from "expo-location";
 
+import * as ImagePicker from "expo-image-picker";
+
 import { Feather, AntDesign } from "@expo/vector-icons";
 
 import { styles } from "./CreatePostsScreenStyled";
 
-import db from "../../../../firebase/config";
+import db from "../../../firebase/config";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -57,6 +58,19 @@ const CreatePostsScreen = ({ navigation }) => {
     })();
   }, []);
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
+    }
+  };
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -75,6 +89,7 @@ const CreatePostsScreen = ({ navigation }) => {
     let location = await Location.getCurrentPositionAsync({});
     await setLocation(location);
     setPhoto(photo.uri);
+    locationGeocodedAddress();
   };
 
   const locationGeocodedAddress = async () => {
@@ -91,7 +106,7 @@ const CreatePostsScreen = ({ navigation }) => {
   const uploadPhotoToServer = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
-
+    console.log(file);
     const uniquePostId = Date.now().toString();
 
     await db.storage().ref(`postImage/${uniquePostId}`).put(file);
@@ -142,7 +157,10 @@ const CreatePostsScreen = ({ navigation }) => {
           </Camera>
         )}
 
-        <TouchableOpacity style={styles.confirmFotoContainer}>
+        <TouchableOpacity
+          onPress={pickImage}
+          style={styles.confirmFotoContainer}
+        >
           {!photo ? (
             <Text style={styles.confitmFotoText}>Загрузите фото</Text>
           ) : (
@@ -166,10 +184,10 @@ const CreatePostsScreen = ({ navigation }) => {
               placeholder={"Местность..."}
               placeholderTextColor={"#BDBDBD"}
               onFocus={() => {
-                locationGeocodedAddress(), setIsShowKeyboard(true);
+                setIsShowKeyboard(true);
               }}
-              value={locationCity}
-              onChangeText={locationCity}
+              value={locationCity ? locationCity : ""}
+              onChangeText={setLocationCity}
             />
           </View>
         </View>

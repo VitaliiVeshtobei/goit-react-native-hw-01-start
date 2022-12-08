@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { authSignInUser } from "../../../../redux/auth/authOperations";
+import { authSignInUser } from "../../../redux/auth/authOperations";
 
 import {
   Text,
@@ -32,7 +32,6 @@ export const LoginScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setstate(initialState);
-    // navigation.navigate("Home");
   };
 
   const keyboardHide = () => {
@@ -44,7 +43,7 @@ export const LoginScreen = ({ navigation }) => {
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
-          source={require("../../../assets/images/photoBg.jpg")}
+          source={require("../../../../assets/images/photoBg.jpg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { authStateCahngeUser } from "../../../redux/auth/authOperations";
+
 import db from "../../../firebase/config";
 
 import { Feather } from "@expo/vector-icons";
@@ -16,9 +18,12 @@ import { styles } from "./ProfileScreenStyled";
 
 const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
-  const { userId, login } = useSelector((state) => state.auth);
+  const { userId, login, avatar } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(authStateCahngeUser());
     getUserPosts();
   }, []);
 
@@ -35,14 +40,18 @@ const ProfileScreen = ({ navigation }) => {
     <View style={styles.container}>
       <ImageBackground
         style={styles.image}
-        source={require("../../../assets/images/photoBg.jpg")}
+        source={require("../../../../assets/images/photoBg.jpg")}
       >
         <View style={styles.profileContainer}>
           <View style={styles.photo}>
-            <Image
-              style={styles.add}
-              source={require("../../../assets/images/add.png")}
-            />
+            {avatar ? (
+              <Image style={styles.avatar} source={{ uri: avatar }} />
+            ) : (
+              <Image
+                style={styles.add}
+                source={require("../../../../assets/images/add.png")}
+              />
+            )}
           </View>
           <View style={styles.loginContainer}>
             <Text style={styles.loginText}>{login}</Text>

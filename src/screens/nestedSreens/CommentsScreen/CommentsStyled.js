@@ -12,6 +12,12 @@ export const styles = StyleSheet.create({
     alignItems: "baseline",
     marginTop: 32,
   },
+  avatarContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: { width: 28, height: 28, borderRadius: 50 },
+  login: { marginTop: 5, color: "#FF6C00" },
   image: {
     width: "100%",
     height: 240,

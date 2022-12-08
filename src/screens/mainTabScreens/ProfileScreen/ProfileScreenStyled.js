@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
+  avatar: { width: "100%", height: "100%" },
   loginContainer: {
     marginLeft: "auto",
     marginRight: "auto",

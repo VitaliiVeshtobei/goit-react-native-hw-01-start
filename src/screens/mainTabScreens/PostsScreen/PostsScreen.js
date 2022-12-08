@@ -7,7 +7,7 @@ import DefaultScreenPosts from "../../nestedSreens/DefaultScreen/DefaultScreenPo
 import CommentsScreen from "../../nestedSreens/CommentsScreen/CommentsScreen";
 import MapScreen from "../../nestedSreens/MapScreen/MapScreen";
 
-import { authSignOutUser } from "../../../../redux/auth/authOperations";
+import { authSignOutUser } from "../../../redux/auth/authOperations";
 
 import { styles } from "./PostsScreenStyled";
 

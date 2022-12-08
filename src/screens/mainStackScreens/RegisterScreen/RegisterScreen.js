@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { authSignUpUser } from "../../../../redux/auth/authOperations";
+import * as ImagePicker from "expo-image-picker";
+
+import { authSignUpUser } from "../../../redux/auth/authOperations";
 
 import {
   Text,
@@ -21,13 +23,28 @@ const initialState = {
   login: "",
   email: "",
   password: "",
+  avatar: "",
 };
 
 export const RegisterScreen = ({ navigation }) => {
   const [state, setstate] = useState(initialState);
+
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   const dispatch = useDispatch();
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setstate((prevState) => ({ ...prevState, avatar: result.assets[0].uri }));
+    }
+  };
 
   const onSubmit = () => {
     setIsShowKeyboard(false);
@@ -41,12 +58,14 @@ export const RegisterScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
+  console.log(state);
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
-          source={require("../../../assets/images/photoBg.jpg")}
+          source={require("../../../../assets/images/photoBg.jpg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -58,10 +77,16 @@ export const RegisterScreen = ({ navigation }) => {
               }}
             >
               <View style={styles.photo}>
-                <Image
-                  style={styles.add}
-                  source={require("../../../assets/images/add.png")}
-                />
+                {state.avatar ? (
+                  <Image style={styles.avatar} source={{ uri: state.avatar }} />
+                ) : (
+                  <TouchableOpacity onPress={pickImage}>
+                    <Image
+                      style={styles.add}
+                      source={require("../../../../assets/images/add.png")}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <Text style={styles.title}>Регистрация</Text>
 

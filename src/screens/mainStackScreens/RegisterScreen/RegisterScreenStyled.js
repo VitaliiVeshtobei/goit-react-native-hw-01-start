@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     width: 120,
     height: 120,
   },
+  avatar: { width: "100%", height: "100%" },
   add: {
     width: 30,
     height: 30,
@@ -87,5 +88,20 @@ export const styles = StyleSheet.create({
     color: "#1B4371",
     fontFamily: "Roboto-Medium",
     fontWeight: 400,
+  },
+  camera: {
+    height: "100%",
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+  },
+  btnContainer: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
