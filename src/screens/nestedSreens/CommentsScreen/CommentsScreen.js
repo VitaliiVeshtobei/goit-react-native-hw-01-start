@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+
 import {
   View,
   Text,
@@ -17,6 +18,7 @@ import { styles } from "./CommentsStyled";
 import db from "../../../firebase/config";
 
 const CommentsScreen = ({ route }) => {
+  const item = route.params.item;
   const photo = route.params.item.photo;
   const postId = route.params.item.id;
 
@@ -31,13 +33,20 @@ const CommentsScreen = ({ route }) => {
 
   const createPost = async () => {
     if (!comment) return;
+
     const date = new Date().toLocaleString();
-    db.firestore()
+    await db
+      .firestore()
       .collection("posts")
       .doc(postId)
       .collection("comments")
       .add({ comment, login, date, avatar });
-    setComment("");
+    await setComment("");
+
+    db.firestore()
+      .collection("posts")
+      .doc(postId)
+      .set({ ...item, number: allComments.length + 1 });
   };
 
   const getAllPosts = async () => {
@@ -80,8 +89,8 @@ const CommentsScreen = ({ route }) => {
           placeholder={"Комментировать..."}
           placeholderTextColor={"#BDBDBD"}
         />
-        <TouchableOpacity style={styles.btn}>
-          <Text onPress={createPost}>
+        <TouchableOpacity style={styles.btn} onPress={createPost}>
+          <Text>
             <Feather name="send" size={24} color="#FFFFFF" />
           </Text>
         </TouchableOpacity>

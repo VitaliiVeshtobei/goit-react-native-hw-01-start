@@ -4,18 +4,26 @@ import { updateUserProfile, authStateChange, authSignOut } from "./authReducer";
 export const authSignUpUser =
   ({ email, password, login, avatar }) =>
   async (dispatch, getState) => {
-    console.log("email, password, login", email, password, login);
     try {
       await db.auth().createUserWithEmailAndPassword(email, password);
 
       const user = await db.auth().currentUser;
-      console.log(user);
+
+      const { displayName, uid, photoURL } = await db.auth().currentUser;
+
+      const response = await fetch(avatar);
+      const file = await response.blob();
+      await db.storage().ref(`avatars/${uid}`).put(file);
+      const processedAvatar = await db
+        .storage()
+        .ref("avatars")
+        .child(uid)
+        .getDownloadURL();
+
       await user.updateProfile({
         displayName: login,
-        photoURL: avatar,
+        photoURL: processedAvatar,
       });
-
-      const { displayName, uid } = await db.auth().currentUser;
 
       const userUpdateProfile = {
         login: displayName,
@@ -35,7 +43,6 @@ export const authSignInUser =
   async (dispatch, getState) => {
     try {
       const user = await db.auth().signInWithEmailAndPassword(email, password);
-      console.log("user", user);
     } catch (error) {
       console.log("error", error);
       console.log("error.code", error.code);

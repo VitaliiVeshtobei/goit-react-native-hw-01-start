@@ -69,6 +69,9 @@ const CreatePostsScreen = ({ navigation }) => {
     if (!result.canceled) {
       setPhoto(result.assets[0].uri);
     }
+    const location = await Location.getCurrentPositionAsync({});
+    await setLocation(location);
+    locationGeocodedAddress(location);
   };
 
   const keyboardHide = () => {
@@ -86,14 +89,14 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
-    let location = await Location.getCurrentPositionAsync({});
-    await setLocation(location);
+
     setPhoto(photo.uri);
-    locationGeocodedAddress();
+    const location = await Location.getCurrentPositionAsync({});
+    await setLocation(location);
+    locationGeocodedAddress(location);
   };
 
-  const locationGeocodedAddress = async () => {
-    if (!location) return;
+  const locationGeocodedAddress = async (location) => {
     let locationGeocodedAddress =
       await LocationGeocodedAddress.reverseGeocodeAsync({
         latitude: location.coords.latitude,
@@ -106,7 +109,6 @@ const CreatePostsScreen = ({ navigation }) => {
   const uploadPhotoToServer = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
-    console.log(file);
     const uniquePostId = Date.now().toString();
 
     await db.storage().ref(`postImage/${uniquePostId}`).put(file);
@@ -191,38 +193,29 @@ const CreatePostsScreen = ({ navigation }) => {
             />
           </View>
         </View>
-        {!photo ? (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.publishBtnContainer}
-            onPress={publishPost}
-          >
-            <Text style={styles.publishText}>Опубликовать</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={{
-              ...styles.publishBtnContainer,
-              backgroundColor: "#FF6C00",
-            }}
-            onPress={publishPost}
-          >
-            <Text style={styles.publishText}>Опубликовать</Text>
-          </TouchableOpacity>
-        )}
+
+        <TouchableOpacity
+          disabled={!photo && true}
+          activeOpacity={0.8}
+          style={
+            photo
+              ? {
+                  ...styles.publishBtnContainer,
+                  backgroundColor: "#FF6C00",
+                }
+              : styles.publishBtnContainer
+          }
+          onPress={publishPost}
+        >
+          <Text style={styles.publishText}>Опубликовать</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.deletehBtnContainer}
-          // onPress={}
+          onPress={resetPost}
         >
-          <AntDesign
-            name="delete"
-            size={24}
-            color="black"
-            onPress={resetPost}
-          />
+          <AntDesign name="delete" size={24} color="black" />
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>

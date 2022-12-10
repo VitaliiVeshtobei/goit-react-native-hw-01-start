@@ -9,8 +9,6 @@ import { styles } from "./DefaultScreenStyled";
 
 const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
-  const [numberOfComments, setNumberOfComments] = useState(null);
-  console.log(posts);
 
   useEffect(() => {
     getAllPosts();
@@ -42,7 +40,9 @@ const PostsScreen = ({ navigation }) => {
                 }}
               >
                 <Feather name="message-circle" size={24} color="#BDBDBD" />
-                <Text style={styles.commentText}>{0}</Text>
+                <Text style={styles.commentText}>
+                  {item.number ? item.number : 0}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity

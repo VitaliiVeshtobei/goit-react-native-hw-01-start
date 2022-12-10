@@ -9,7 +9,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import * as ImagePicker from "expo-image-picker";
+
 import { authStateCahngeUser } from "../../../redux/auth/authOperations";
+import { updateUserProfile } from "../../../redux/auth/authReducer";
 
 import db from "../../../firebase/config";
 
@@ -19,6 +22,7 @@ import { styles } from "./ProfileScreenStyled";
 const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
   const { userId, login, avatar } = useSelector((state) => state.auth);
+  const [avatarProfile, setAvatarProfile] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -26,6 +30,45 @@ const ProfileScreen = ({ navigation }) => {
     dispatch(authStateCahngeUser());
     getUserPosts();
   }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setAvatarProfile(result.assets[0].uri);
+      const user = await db.auth().currentUser;
+
+      const { displayName, uid, photoURL } = await db.auth().currentUser;
+
+      const response = await fetch(avatarProfile);
+      const file = await response.blob();
+
+      await db.storage().ref(`avatars/${userId}`).put(file);
+      const processedAvatar = await db
+        .storage()
+        .ref("avatars")
+        .child(userId)
+        .getDownloadURL();
+
+      await user.updateProfile({
+        displayName: login,
+        photoURL: processedAvatar,
+      });
+
+      const userUpdateProfile = {
+        login: displayName,
+        userId: userId,
+        avatar: photoURL,
+      };
+
+      dispatch(updateUserProfile(userUpdateProfile));
+    }
+  };
 
   const getUserPosts = async () => {
     await db
@@ -47,10 +90,12 @@ const ProfileScreen = ({ navigation }) => {
             {avatar ? (
               <Image style={styles.avatar} source={{ uri: avatar }} />
             ) : (
-              <Image
-                style={styles.add}
-                source={require("../../../../assets/images/add.png")}
-              />
+              <TouchableOpacity onPress={pickImage}>
+                <Image
+                  style={styles.add}
+                  source={require("../../../../assets/images/add.png")}
+                />
+              </TouchableOpacity>
             )}
           </View>
           <View style={styles.loginContainer}>

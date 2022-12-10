@@ -15,9 +15,11 @@ const NestedScreen = createNativeStackNavigator();
 
 const PostsScreen = () => {
   const dispatch = useDispatch();
+
   const signOut = () => {
     dispatch(authSignOutUser());
   };
+
   return (
     <NestedScreen.Navigator>
       <NestedScreen.Screen

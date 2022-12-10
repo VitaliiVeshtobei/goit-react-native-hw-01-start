@@ -23,11 +23,11 @@ const initialState = {
   login: "",
   email: "",
   password: "",
-  avatar: "",
 };
 
 export const RegisterScreen = ({ navigation }) => {
-  const [state, setstate] = useState(initialState);
+  const [state, setState] = useState(initialState);
+  const [avatar, setAvatar] = useState(null);
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
@@ -42,7 +42,7 @@ export const RegisterScreen = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setstate((prevState) => ({ ...prevState, avatar: result.assets[0].uri }));
+      setAvatar(result.assets[0].uri);
     }
   };
 
@@ -50,15 +50,14 @@ export const RegisterScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
 
-    dispatch(authSignUpUser(state));
-    setstate(initialState);
+    dispatch(authSignUpUser({ ...state, avatar }));
+    setState(initialState);
   };
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
-  console.log(state);
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -77,8 +76,8 @@ export const RegisterScreen = ({ navigation }) => {
               }}
             >
               <View style={styles.photo}>
-                {state.avatar ? (
-                  <Image style={styles.avatar} source={{ uri: state.avatar }} />
+                {avatar ? (
+                  <Image style={styles.avatar} source={{ uri: avatar }} />
                 ) : (
                   <TouchableOpacity onPress={pickImage}>
                     <Image
@@ -98,7 +97,7 @@ export const RegisterScreen = ({ navigation }) => {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.login}
                   onChangeText={(value) =>
-                    setstate((prevState) => ({ ...prevState, login: value }))
+                    setState((prevState) => ({ ...prevState, login: value }))
                   }
                 />
               </View>
@@ -110,7 +109,7 @@ export const RegisterScreen = ({ navigation }) => {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.email}
                   onChangeText={(value) =>
-                    setstate((prevState) => ({ ...prevState, email: value }))
+                    setState((prevState) => ({ ...prevState, email: value }))
                   }
                 />
               </View>
@@ -123,7 +122,7 @@ export const RegisterScreen = ({ navigation }) => {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.password}
                   onChangeText={(value) =>
-                    setstate((prevState) => ({ ...prevState, password: value }))
+                    setState((prevState) => ({ ...prevState, password: value }))
                   }
                 />
                 <Text style={styles.showPassword}>Показать</Text>
