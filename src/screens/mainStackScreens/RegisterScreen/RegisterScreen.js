@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 
 import * as ImagePicker from "expo-image-picker";
 
+import { useValidation } from "react-native-form-validator";
+
 import { authSignUpUser } from "../../../redux/auth/authOperations";
 
 import {
@@ -19,17 +21,16 @@ import {
 
 import { styles } from "./RegisterScreenStyled";
 
-const initialState = {
-  login: "",
-  email: "",
-  password: "",
-};
-
 export const RegisterScreen = ({ navigation }) => {
-  const [state, setState] = useState(initialState);
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [avatar, setAvatar] = useState(null);
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  const [isShowPassword, setIsShowPassword] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -50,13 +51,34 @@ export const RegisterScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
 
-    dispatch(authSignUpUser({ ...state, avatar }));
-    setState(initialState);
+    validate({
+      login: { minlength: 3, maxlength: 7, required: true },
+      email: { email: true, required: true },
+      password: { password: true, minlength: 6, required: true },
+    });
+
+    dispatch(authSignUpUser({ login, email, password, avatar }));
+
+    setLogin("");
+    setEmail("");
+    setPassword("");
   };
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { login, email, password },
+    });
+
+  const showPassword = () => {
+    if (isShowPassword) {
+      return setIsShowPassword(false);
+    }
+    setIsShowPassword(true);
   };
 
   return (
@@ -95,11 +117,15 @@ export const RegisterScreen = ({ navigation }) => {
                   placeholder={"Логин"}
                   placeholderTextColor={"#BDBDBD"}
                   onFocus={() => setIsShowKeyboard(true)}
-                  value={state.login}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, login: value }))
-                  }
+                  value={login}
+                  onChangeText={(value) => setLogin(value)}
                 />
+                {isFieldInError("login") &&
+                  getErrorsInField("login").map((errorMessage, indx) => (
+                    <Text style={{ color: "red", marginTop: 5 }} key={indx}>
+                      {errorMessage}
+                    </Text>
+                  ))}
               </View>
               <View style={{ marginTop: 16 }}>
                 <TextInput
@@ -107,25 +133,38 @@ export const RegisterScreen = ({ navigation }) => {
                   placeholder={"Адрес электронной почты"}
                   placeholderTextColor={"#BDBDBD"}
                   onFocus={() => setIsShowKeyboard(true)}
-                  value={state.email}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  value={email}
+                  onChangeText={(value) => setEmail(value)}
                 />
+                {isFieldInError("email") &&
+                  getErrorsInField("email").map((errorMessage, indx) => (
+                    <Text style={{ color: "red", marginTop: 5 }} key={indx}>
+                      {errorMessage}
+                    </Text>
+                  ))}
               </View>
               <View style={{ marginTop: 16 }}>
                 <TextInput
                   style={styles.input}
-                  secureTextEntry={true}
+                  secureTextEntry={isShowPassword ? true : false}
                   placeholder={"Пароль"}
                   placeholderTextColor={"#BDBDBD"}
                   onFocus={() => setIsShowKeyboard(true)}
-                  value={state.password}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
+                  value={password}
+                  onChangeText={(value) => setPassword(value)}
                 />
-                <Text style={styles.showPassword}>Показать</Text>
+                <TouchableOpacity
+                  style={styles.showPasswordContainer}
+                  onPress={showPassword}
+                >
+                  <Text style={styles.showPassword}>Показать</Text>
+                </TouchableOpacity>
+                {isFieldInError("password") &&
+                  getErrorsInField("password").map((errorMessage, indx) => (
+                    <Text style={{ color: "red", marginTop: 5 }} key={indx}>
+                      {errorMessage}
+                    </Text>
+                  ))}
               </View>
 
               {!isShowKeyboard && (

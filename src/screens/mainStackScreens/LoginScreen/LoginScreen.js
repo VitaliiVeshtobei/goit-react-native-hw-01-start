@@ -14,29 +14,45 @@ import {
   ImageBackground,
 } from "react-native";
 
+import { useValidation } from "react-native-form-validator";
+
 import { styles } from "./LoginScreenStyled";
 
-const initialState = {
-  email: "",
-  password: "",
-};
-
 export const LoginScreen = ({ navigation }) => {
-  const [state, setstate] = useState(initialState);
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-
+  const [isShowPassword, setIsShowPassword] = useState(true);
   const dispatch = useDispatch();
 
   const onSubmit = () => {
-    dispatch(authSignInUser(state));
+    validate({
+      email: { email: true, required: true },
+      password: { password: true, minlength: 6, required: true },
+    });
+    dispatch(authSignInUser({ password, email }));
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    setstate(initialState);
+
+    setPassword("");
+    setEmail("");
   };
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const { validate, isFieldInError, getErrorsInField, getErrorMessages } =
+    useValidation({
+      state: { email, password },
+    });
+
+  const showPassword = () => {
+    if (isShowPassword) {
+      return setIsShowPassword(false);
+    }
+    setIsShowPassword(true);
   };
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -63,28 +79,38 @@ export const LoginScreen = ({ navigation }) => {
                     placeholder={"Адрес электронной почты"}
                     placeholderTextColor={"#BDBDBD"}
                     onFocus={() => setIsShowKeyboard(true)}
-                    value={state.email}
-                    onChangeText={(value) =>
-                      setstate((prevState) => ({ ...prevState, email: value }))
-                    }
+                    value={email}
+                    onChangeText={(value) => setEmail(value)}
                   />
+                  {isFieldInError("email") &&
+                    getErrorsInField("email").map((errorMessage, indx) => (
+                      <Text style={{ color: "red", marginTop: 5 }} key={indx}>
+                        {errorMessage}
+                      </Text>
+                    ))}
                 </View>
                 <View style={{ marginTop: 16 }}>
                   <TextInput
                     style={styles.input}
-                    secureTextEntry={true}
+                    secureTextEntry={isShowPassword ? true : false}
                     placeholder={"Пароль"}
                     placeholderTextColor={"#BDBDBD"}
                     onFocus={() => setIsShowKeyboard(true)}
-                    value={state.password}
-                    onChangeText={(value) =>
-                      setstate((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
+                    value={password}
+                    onChangeText={(value) => setPassword(value)}
                   />
-                  <Text style={styles.showPassword}>Показать</Text>
+                  {isFieldInError("password") &&
+                    getErrorsInField("password").map((errorMessage, indx) => (
+                      <Text style={{ color: "red", marginTop: 5 }} key={indx}>
+                        {errorMessage}
+                      </Text>
+                    ))}
+                  <TouchableOpacity
+                    style={styles.showPasswordContainer}
+                    onPress={showPassword}
+                  >
+                    <Text style={styles.showPassword}>Показать</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
               {!isShowKeyboard && (

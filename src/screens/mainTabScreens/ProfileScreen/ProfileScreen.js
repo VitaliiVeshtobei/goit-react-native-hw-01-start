@@ -117,7 +117,9 @@ const ProfileScreen = ({ navigation }) => {
                     }}
                   >
                     <Feather name="message-circle" size={24} color="#BDBDBD" />
-                    <Text style={styles.commentText}>0</Text>
+                    <Text style={styles.commentText}>
+                      {item.number ? item.number : 0}
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity

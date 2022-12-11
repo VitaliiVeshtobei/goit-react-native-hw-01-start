@@ -19,7 +19,7 @@ export const authSignUpUser =
         .ref("avatars")
         .child(uid)
         .getDownloadURL();
-
+      console.log(login, avatar);
       await user.updateProfile({
         displayName: login,
         photoURL: processedAvatar,

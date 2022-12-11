@@ -63,10 +63,12 @@ export const styles = StyleSheet.create({
     fontWeight: 400,
     color: "#1B4371",
   },
-  showPassword: {
+  showPasswordContainer: {
     position: "absolute",
     right: 16,
     top: 16,
+  },
+  showPassword: {
     color: "#1B4371",
     fontFamily: "Roboto-Medium",
     fontWeight: 400,
