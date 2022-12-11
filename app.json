@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "myNewProject",
+    "name": "Social App",
     "slug": "myNewProject",
+    "privacy": "public",
+    "description": "Add and view posts",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
