@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   FlatList,
   TouchableOpacity,
@@ -64,6 +63,7 @@ const CommentsScreen = ({ route }) => {
       <View style={styles.commentContainer}>
         <Image source={{ uri: photo }} style={styles.image} />
       </View>
+
       <FlatList
         data={allComments}
         keyExtractor={(item, indx) => indx.toString()}
@@ -81,6 +81,7 @@ const CommentsScreen = ({ route }) => {
           </View>
         )}
       />
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.inputText}

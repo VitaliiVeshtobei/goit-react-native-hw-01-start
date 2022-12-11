@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "flex-end",
     marginHorizontal: 16,
     marginBottom: 16,
   },
@@ -24,6 +25,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   commentTextContainer: {
+    flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.03)",
     borderRadius: 6,
     marginLeft: 8,
@@ -46,7 +48,6 @@ export const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderRadius: 100,
     padding: 16,
-    height: 50,
   },
 
   btn: {
