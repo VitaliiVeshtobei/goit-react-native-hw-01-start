@@ -109,7 +109,7 @@ export const RegisterScreen = ({ navigation }) => {
                   </TouchableOpacity>
                 )}
               </View>
-              <Text style={styles.title}>!!!!!!!!!!</Text>
+              <Text style={styles.title}>Регистрация</Text>
 
               <View>
                 <TextInput
